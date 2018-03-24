@@ -25,24 +25,21 @@ namespace MatchEvaluatorTest
 
         public string ReplaceCC(Match m)
         {
-            var key = GetGuidString(m);
-            Guid guid = new Guid(key);
-            Guid newGuid = Guid.NewGuid();
-            string x = m.ToString();
-            string y = string.Format(@"Guid(""{0}"")", newGuid.ToString("D"));
+            var newGuid = Guid.NewGuid();
+            var y = string.Format(@"Guid(""{0}"")", newGuid.ToString("D"));
             return y;
         }
 
         public string ReplaceCC2(Match m)
         {
             var key = GetGuidString(m);
-            Guid guid = new Guid(key);
+            var guid = new Guid(key);
             if (!dict.ContainsKey(key))
             {
                 dict[key] = Guid.NewGuid();
             }
-            Guid newGuid = dict[key];
-            string y = string.Format(@"Guid(""{0}"")", newGuid.ToString("D"));
+            var newGuid = dict[key];
+            var y = string.Format(@"Guid(""{0}"")", newGuid.ToString("D"));
             return y;
         }
 
