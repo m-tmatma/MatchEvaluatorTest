@@ -12,6 +12,11 @@ namespace MatchEvaluatorTest
         private Dictionary<string, Guid> dict = new Dictionary<string, Guid>();
 
         /// <summary>
+        /// Variable
+        /// </summary>
+        static private string raw_variable = @"(<*)\w+(>*)";
+
+        /// <summary>
         /// 00000000-0000-0000-0000-000000000000
         /// </summary>
         static private string raw_guid_string1 = "([0-9A-Fa-f]{8})-([0-9A-Fa-f]{4})-([0-9A-Fa-f]{4})-([0-9A-Fa-f]{4})-([0-9A-Fa-f]{12})";
@@ -68,6 +73,55 @@ namespace MatchEvaluatorTest
                                                + spaces
                                                + "}";
 
+        static private string raw_guid_value = hex_4byte_string + comma_spaces
+                                               + hex_2byte_string + comma_spaces
+                                               + hex_2byte_string + comma_spaces
+                                               + hex_8_of_1byte;
+        static private string name_guid_value_def = @"(?<RAW_GUID_DEF>" + raw_guid_value + ")";
+        static private string name_guid_value_imp = @"(?<RAW_GUID_IMP>" + raw_guid_value + ")";
+
+        /// <summary>
+        /// DEFINE_GUID(<<name>>, 0x00000000,0x0000,0x0000, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00);
+        /// </summary>
+        static private string raw_define_guid = @"(?<="
+                                               + @"DEFINE_GUID"
+                                               + spaces
+                                               + @"\("
+                                               + spaces
+                                               + raw_variable
+                                               + spaces
+                                               + @","
+                                               + spaces
+                                               + @")"
+                                               + name_guid_value_def
+                                               + @"(?="
+                                               + spaces
+                                               + @"\)"
+                                               + @")";
+
+        /// <summary>
+        /// IMPLEMENT_OLECREATE(<<class>>, <<external_name>>, 0x00000000,0x0000,0x0000, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00);
+        /// </summary>
+        static private string raw_impl_olecreate = @"(?<="
+                                               + @"IMPLEMENT_OLECREATE"
+                                               + spaces
+                                               + @"\("
+                                               + spaces
+                                               + raw_variable
+                                               + spaces
+                                               + @","
+                                               + spaces
+                                               + raw_variable
+                                               + spaces
+                                               + @","
+                                               + spaces
+                                               + @")"
+                                               + name_guid_value_imp
+                                               + @"(?="
+                                               + spaces
+                                               + @"\)"
+                                               + @")";
+
         // For reference
         // https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/regular-expression-language-quick-reference#backreference_constructs
         // https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/backreference-constructs-in-regular-expressions
@@ -76,15 +130,19 @@ namespace MatchEvaluatorTest
         static private string word_separater = @"\b";
         static private string name_guid_string1 = @"(?<RawHyphenDigits>" + raw_guid_string1 + ")";
         static private string name_guid_string2 = @"(?<Raw32Digits>"     + raw_guid_string2 + ")";
-        static private string name_guid_string3 = @"(?<GuidVariable>"    + raw_string_array + ")";
+        static private string name_guid_string3 = @"(?<GuidVariable>" + raw_string_array + ")";
+        static private string name_guid_string4 = @"(?<DEFINE_GUID>"  + raw_define_guid    + ")";
+        static private string name_guid_string5 = @"(?<OLECREATE>"    + raw_impl_olecreate + ")";
         static private string guid_string1 = word_separater + name_guid_string1 + word_separater;
         static private string guid_string2 = word_separater + name_guid_string2 + word_separater;
-        static private string guid_string3 = word_separater + name_guid_string3 + word_separater;
+        //static private string guid_string3 = word_separater + name_guid_string3 + word_separater;
         static private string[] elements = new string[]
         {
             guid_string1,
             guid_string2,
             name_guid_string3,
+            name_guid_string4,
+            name_guid_string5,
         };
         static private string[] elements_par = Array.ConvertAll(elements, delegate (string elem) { return "(" + elem + ")"; });
         static private string guid_string = string.Join("|", elements_par);
@@ -113,6 +171,16 @@ namespace MatchEvaluatorTest
                 /// "X": {0x00000000, 0x0000, 0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}
                 /// </summary>
                 GuidVariable,
+
+                /// <summary>
+                /// DEFINE_GUID(<<name>>, 0x00000000,0x0000,0x0000, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00);
+                /// </summary>
+                DEFINE_GUID,
+
+                /// <summary>
+                /// IMPLEMENT_OLECREATE(<<class>>, <<external_name>>, 0x00000000,0x0000,0x0000, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00);
+                /// </summary>
+                OLECREATE,
             };
 
             /// <summary>
@@ -138,12 +206,61 @@ namespace MatchEvaluatorTest
                     this.delegateConvertGuid = delegateConvertGuid;
                 }
             };
+
+            /// <summary>
+            /// 0x00000000,0x0000,0x0000, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+            /// </summary>
+            /// <param name="guid"></param>
+            /// <returns></returns>
+            static string FormatGuidAsRawValues(Guid guid)
+            {
+                var bytes = guid.ToByteArray();
+                var builder = new StringBuilder();
+                int i = 0;
+
+                int guid_1st = ((int)bytes[3] << 24) | ((int)bytes[2] << 16) | ((int)bytes[1] << 8) | bytes[0];
+                short guid_2nd = (short)(((int)bytes[5] << 8) | bytes[4]);
+                short guid_3rd = (short)(((int)bytes[7] << 8) | bytes[6]);
+
+                // 0x00000000
+                builder.Append("0x");
+                builder.Append(guid_1st.ToString("x8"));
+                builder.Append(", ");
+
+                // 0x0000
+                builder.Append("0x");
+                builder.Append(guid_2nd.ToString("x4"));
+                builder.Append(", ");
+
+                // 0x0000
+                builder.Append("0x");
+                builder.Append(guid_3rd.ToString("x4"));
+                builder.Append(", ");
+
+                // 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+                for (i = 0; i < 8; i++)
+                {
+                    builder.Append("0x");
+                    builder.Append(bytes[8+i].ToString("x2"));
+                    if (i != 7)
+                    {
+                        builder.Append(", ");
+                    }
+                }
+                return builder.ToString();
+            }
+
+            /// <summary>
+            /// https://msdn.microsoft.com/ja-jp/library/97af8hh4(v=vs.110).aspx
+            /// </summary>
             static private MapFormat[] tableFormats = new MapFormat[] {
                 new MapFormat("RawHyphenDigits", Format.RawHyphenDigits, delegate (Guid guid) { return guid.ToString("D"); }),
                 new MapFormat("Raw32Digits",     Format.Raw32Digits,     delegate (Guid guid) { return guid.ToString("N"); }),
                 new MapFormat("GuidVariable",    Format.GuidVariable,    delegate (Guid guid) { return guid.ToString("X"); }),
+                new MapFormat("RAW_GUID_DEF",    Format.DEFINE_GUID,     delegate (Guid guid) { return FormatGuidAsRawValues(guid); }),
+                new MapFormat("RAW_GUID_IMP",    Format.OLECREATE,       delegate (Guid guid) { return FormatGuidAsRawValues(guid); }),
             };
-
+ 
             private Match m;
 
             private MapFormat mapFormat;
@@ -173,8 +290,25 @@ namespace MatchEvaluatorTest
                 {
                     if (m.Groups[mapFormat.Key].Success)
                     {
-                        var guid = new Guid(m.Groups[mapFormat.Key].Value);
-                        this.Key =  guid.ToString("D");
+                        Guid guid;
+                        var value = m.Groups[mapFormat.Key].Value;
+
+                        // try converting GUID.
+                        if (!Guid.TryParse(value, out guid))
+                        {
+                            var builder = new StringBuilder(value);
+                            builder.Replace("0x", "");
+                            builder.Replace(",", "");
+                            builder.Replace(" ", "");
+                            value = builder.ToString();
+                        }
+
+                        // retry converting GUID.
+                        if (Guid.TryParse(value, out guid))
+                        {
+                            this.Key = guid.ToString("D");
+                        }
+
                         this.mapFormat = mapFormat;
                         this.GuidFormat = mapFormat.GuidFormat;
                         break;
@@ -226,7 +360,7 @@ namespace MatchEvaluatorTest
  
         public string Replace(string input)
         {
-            Console.WriteLine(guid_string);
+            //Console.WriteLine(guid_string);
             var myEvaluator = new MatchEvaluator(ReplaceCC);
 
             // Replace matched characters using the delegate method.
@@ -235,7 +369,7 @@ namespace MatchEvaluatorTest
         }
         public string Replace2(string input)
         {
-            Console.WriteLine(guid_string);
+            //Console.WriteLine(guid_string);
             var myEvaluator = new MatchEvaluator(ReplaceCC2);
 
             // Replace matched characters using the delegate method.
@@ -270,6 +404,8 @@ namespace MatchEvaluatorTest
             string input8 = @"{0xf86ed29d, 0x8060, 0x485f,{0xac,0xf2,0x93,0x71,0x6c,0xa4,0x63,0xb8}}";
             string input9 = @"{0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}";
             string input10 = @"{0x00,0x00,0x00,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}";
+            string input11 = @"IMPLEMENT_OLECREATE(<<class>>, <<external_name>>, 0x00000000,0x0000,0x0000,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00);";
+            string input12 = @"DEFINE_GUID(<<name>>, 0x00000000,0x0000,0x0000,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00);";
             string[] array = new string[]
             {
                 input1,
@@ -282,6 +418,8 @@ namespace MatchEvaluatorTest
                 input8,
                 input9,
                 input10,
+                input11,
+                input12,
             };
             string input = string.Join(Environment.NewLine, array);
             Console.WriteLine("Original");
