@@ -115,24 +115,38 @@ namespace MatchEvaluatorTest
                 GuidVariable,
             };
 
+            /// <summary>
+            /// delegate for converting a guid to a string
+            /// </summary>
+            /// <param name="guid"></param>
+            /// <returns></returns>
+            delegate string ConvertGuid(Guid guid);
+
+            /// <summary>
+            /// class for converting GUID
+            /// </summary>
             private class MapFormat
             {
-                public string Key;
-                public Format GuidFormat;
+                public string Key { get; private set; }
+                public Format GuidFormat { get; private set; }
+                public ConvertGuid delegateConvertGuid { get; private set; }
 
-                public MapFormat(string Key, Format GuidFormat)
+                public MapFormat(string Key, Format GuidFormat, ConvertGuid delegateConvertGuid)
                 {
                     this.Key = Key;
                     this.GuidFormat = GuidFormat;
+                    this.delegateConvertGuid = delegateConvertGuid;
                 }
             };
             static private MapFormat[] tableFormats = new MapFormat[] {
-                new MapFormat("RawHyphenDigits", Format.RawHyphenDigits),
-                new MapFormat("Raw32Digits", Format.Raw32Digits),
-                new MapFormat("GuidVariable", Format.GuidVariable),
+                new MapFormat("RawHyphenDigits", Format.RawHyphenDigits, delegate (Guid guid) { return guid.ToString("D"); }),
+                new MapFormat("Raw32Digits",     Format.Raw32Digits,     delegate (Guid guid) { return guid.ToString("N"); }),
+                new MapFormat("GuidVariable",    Format.GuidVariable,    delegate (Guid guid) { return guid.ToString("X"); }),
             };
 
             private Match m;
+
+            private MapFormat mapFormat;
 
             /// <summary>
             /// key for Guid dictionary
@@ -153,6 +167,7 @@ namespace MatchEvaluatorTest
                 this.m = m;
 
                 this.Key = string.Empty;
+                this.mapFormat = null;
                 this.GuidFormat = Format.Unknown;
                 foreach (MapFormat mapFormat in tableFormats)
                 {
@@ -160,29 +175,30 @@ namespace MatchEvaluatorTest
                     {
                         var guid = new Guid(m.Groups[mapFormat.Key].Value);
                         this.Key =  guid.ToString("D");
+                        this.mapFormat = mapFormat;
                         this.GuidFormat = mapFormat.GuidFormat;
                         break;
                     }
                 }
             }
 
+            /// <summary>
+            /// Format the guid in the original format
+            /// </summary>
+            /// <param name="guid"></param>
+            /// <returns></returns>
             public string Convert(Guid guid)
             {
-                switch(this.GuidFormat)
+                if (this.mapFormat != null)
                 {
-                    case Format.Unknown:
-                        break;
-                    case Format.RawHyphenDigits:
-                        return guid.ToString("D");
-                    case Format.Raw32Digits:
-                        return guid.ToString("N");
-                    case Format.GuidVariable:
-                        return guid.ToString("X");
+                    return this.mapFormat.delegateConvertGuid(guid);
                 }
-                return string.Empty;
+
+                // return original string
+                return this.m.ToString();
             }
         }
-
+ 
         public string ReplaceCC(Match m)
         {
             var processGuid = new ProcessGuid(m);
