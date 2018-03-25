@@ -81,7 +81,7 @@ namespace MatchEvaluatorTest
             Console.WriteLine(output);
 
             // Replace matched characters using the delegate method.
-            var output2 = testReg.Replace(input);
+            var output2 = testReg.Replace2(input);
             Console.WriteLine(output2);
         }
     }
