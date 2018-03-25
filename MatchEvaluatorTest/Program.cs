@@ -12,64 +12,122 @@ namespace MatchEvaluatorTest
         private Dictionary<string, Guid> dict = new Dictionary<string, Guid>();
         static private string raw_guid_string1 = "([0-9A-Fa-f]{8})-([0-9A-Fa-f]{4})-([0-9A-Fa-f]{4})-([0-9A-Fa-f]{4})-([0-9A-Fa-f]{12})";
         static private string raw_guid_string2 = "([0-9A-Fa-f]{32})";
-        static private string raw_head_separater = @"[{""]";
-        static private string raw_tail_separater = @"[}""]";
+        //static private string raw_head_separater = @"[{""]";
+        //static private string raw_tail_separater = @"[}""]";
 
         // For reference
         // https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/regular-expression-language-quick-reference#backreference_constructs
         // https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/backreference-constructs-in-regular-expressions
-        static private string name_head_separater = @"(?<head_sep>" + raw_head_separater + ")";
-        static private string name_tail_separater = @"(?<tail_sep>" + raw_tail_separater + ")";
-        static private string name_guid_string1 = @"(?<raw_guid>" + raw_guid_string1 + ")";
+        //static private string name_head_separater = @"(?:" + raw_head_separater + ")";
+        //static private string name_tail_separater = @"(?:" + raw_tail_separater + ")";
+        static private string name_head_separater = @"\b";
+        static private string name_tail_separater = @"\b";
+        static private string name_guid_string1 = @"(?<raw_guid1>" + raw_guid_string1 + ")";
+        static private string name_guid_string2 = @"(?<raw_guid2>" + raw_guid_string2 + ")";
         static private string guid_string = name_head_separater + name_guid_string1 + name_tail_separater;
         static private Regex reg = new Regex(guid_string);
- 
-        private string GetGuidString(Match m)
+
+        private class ProcessGuid
         {
-            return m.Groups["raw_guid"].Value;
+            /// <summary>
+            /// https://msdn.microsoft.com/ja-jp/library/97af8hh4(v=vs.110).aspx
+            /// </summary>
+            public enum Format
+            {
+                Unknown,
+
+                /// <summary>
+                /// "D": 00000000-0000-0000-0000-000000000000
+                /// </summary>
+                RawHyphenDigits,
+
+                /// <summary>
+                /// "N": 00000000000000000000000000000000
+                /// </summary>
+                Raw32Digits,
+            };
+            private Match m;
+
+            /// <summary>
+            /// key for Guid dictionary
+            /// </summary>
+            public string Key { get; private set; }
+
+            /// <summary>
+            /// guid format
+            /// </summary>
+            public Format GuidFormat { get; private set; }
+
+            /// <summary>
+            /// constructor
+            /// </summary>
+            /// <param name="m"></param>
+            public ProcessGuid(Match m)
+            {
+                this.m = m;
+                var key = string.Empty;
+                if (m.Groups["raw_guid1"].Success)
+                {
+                    var guid = new Guid(m.Groups["raw_guid1"].Value);
+                    this.GuidFormat = Format.RawHyphenDigits;
+                    key = guid.ToString("D");
+                }
+                else if (m.Groups["raw_guid2"].Success)
+                {
+                    var guid = new Guid(m.Groups["raw_guid2"].Value);
+                    this.GuidFormat = Format.RawHyphenDigits;
+                    key = guid.ToString("D");
+                }
+                else
+                {
+                    this.GuidFormat = Format.Unknown;
+                }
+                this.Key = key;
+            }
+
+            public string Convert(Guid guid)
+            {
+                switch(this.GuidFormat)
+                {
+                    case Format.Unknown:
+                        break;
+                    case Format.RawHyphenDigits:
+                        return guid.ToString("D");
+                    case Format.Raw32Digits:
+                        return guid.ToString("N");
+                }
+                return string.Empty;
+            }
         }
 
         public string ReplaceCC(Match m)
         {
+            var processGuid = new ProcessGuid(m);
             var newGuid = Guid.NewGuid();
 
-            if (m.Groups["head_sep"].Success && m.Groups["tail_sep"].Success)
-            {
-                var head_sep = m.Groups["head_sep"].Value;
-                var tail_sep = m.Groups["tail_sep"].Value;
-                var guid_str = newGuid.ToString("D");
-                return head_sep + guid_str + tail_sep;
-            }
-            else
-            {
-                return m.ToString();
-            }
-       }
+            var guid_str = processGuid.Convert(newGuid);
+            return guid_str;
+
+        }
 
         public string ReplaceCC2(Match m)
         {
-            var key = GetGuidString(m);
+            var processGuid = new ProcessGuid(m);
+            var key = processGuid.Key;
             var guid = new Guid(key);
             if (!dict.ContainsKey(key))
             {
                 dict[key] = Guid.NewGuid();
             }
             var newGuid = dict[key];
-            if (m.Groups["head_sep"].Success && m.Groups["tail_sep"].Success)
-            {
-                var head_sep = m.Groups["head_sep"].Value;
-                var tail_sep = m.Groups["tail_sep"].Value;
-                var guid_str = newGuid.ToString("D");
-                return head_sep + guid_str + tail_sep;
-            }
-            else
-            {
-                return m.ToString();
-            }
+
+            var guid_str = processGuid.Convert(newGuid);
+            return guid_str;
         }
  
         public string Replace(string input)
         {
+            Console.WriteLine(guid_string);
             var myEvaluator = new MatchEvaluator(ReplaceCC);
 
             // Replace matched characters using the delegate method.
@@ -78,6 +136,7 @@ namespace MatchEvaluatorTest
         }
         public string Replace2(string input)
         {
+            Console.WriteLine(guid_string);
             var myEvaluator = new MatchEvaluator(ReplaceCC2);
 
             // Replace matched characters using the delegate method.
