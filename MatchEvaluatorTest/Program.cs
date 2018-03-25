@@ -10,10 +10,63 @@ namespace MatchEvaluatorTest
     public class TestReg
     {
         private Dictionary<string, Guid> dict = new Dictionary<string, Guid>();
+
+        /// <summary>
+        /// 00000000-0000-0000-0000-000000000000
+        /// </summary>
         static private string raw_guid_string1 = "([0-9A-Fa-f]{8})-([0-9A-Fa-f]{4})-([0-9A-Fa-f]{4})-([0-9A-Fa-f]{4})-([0-9A-Fa-f]{12})";
+
+        /// <summary>
+        /// 00000000000000000000000000000000
+        /// </summary>
         static private string raw_guid_string2 = "([0-9A-Fa-f]{32})";
+
+        /// <summary>
+        /// 0x00000000
+        /// </summary>
+        static private string hex_4byte_string = "(0[xX][0-9A-Fa-f]{1,8})";
+
+        /// <summary>
+        /// 0x0000
+        /// </summary>
+        static private string hex_2byte_string = "(0[xX][0-9A-Fa-f]{1,4})";
+
+        /// <summary>
+        /// 0x00
+        /// </summary>
+        static private string hex_1byte_string = "(0[xX][0-9A-Fa-f]{1,2})";
+        static private string spaces = @"\s*";
+        static private string comma_spaces = spaces + "," + spaces;
         //static private string raw_head_separater = @"[{""]";
         //static private string raw_tail_separater = @"[}""]";
+
+        /// <summary>
+        /// 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+        /// </summary>
+        static private string hex_8_of_1byte = hex_1byte_string
+                                     + comma_spaces + hex_1byte_string
+                                     + comma_spaces + hex_1byte_string
+                                     + comma_spaces + hex_1byte_string
+                                     + comma_spaces + hex_1byte_string
+                                     + comma_spaces + hex_1byte_string
+                                     + comma_spaces + hex_1byte_string
+                                     + comma_spaces + hex_1byte_string;
+
+        /// <summary>
+        /// {0x00000000, 0x0000, 0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}
+        /// </summary>
+        static private string raw_string_array = "{"
+                                               + spaces
+                                               + hex_4byte_string + comma_spaces
+                                               + hex_2byte_string + comma_spaces
+                                               + hex_2byte_string + comma_spaces
+                                               + "{"
+                                               + spaces
+                                               + hex_8_of_1byte
+                                               + spaces
+                                               + "}"
+                                               + spaces
+                                               + "}";
 
         // For reference
         // https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/regular-expression-language-quick-reference#backreference_constructs
@@ -23,10 +76,16 @@ namespace MatchEvaluatorTest
         static private string word_separater = @"\b";
         static private string name_guid_string1 = @"(?<RawHyphenDigits>" + raw_guid_string1 + ")";
         static private string name_guid_string2 = @"(?<Raw32Digits>"     + raw_guid_string2 + ")";
+        static private string name_guid_string3 = @"(?<GuidVariable>"    + raw_string_array + ")";
         static private string guid_string1 = word_separater + name_guid_string1 + word_separater;
         static private string guid_string2 = word_separater + name_guid_string2 + word_separater;
-
-        static private string[] elements = new string[] { guid_string1, guid_string2 };
+        static private string guid_string3 = word_separater + name_guid_string3 + word_separater;
+        static private string[] elements = new string[]
+        {
+            guid_string1,
+            guid_string2,
+            name_guid_string3,
+        };
         static private string[] elements_par = Array.ConvertAll(elements, delegate (string elem) { return "(" + elem + ")"; });
         static private string guid_string = string.Join("|", elements_par);
         static private Regex reg = new Regex(guid_string);
@@ -49,6 +108,11 @@ namespace MatchEvaluatorTest
                 /// "N": 00000000000000000000000000000000
                 /// </summary>
                 Raw32Digits,
+
+                /// <summary>
+                /// "X": {0x00000000, 0x0000, 0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}
+                /// </summary>
+                GuidVariable,
             };
 
             private class MapFormat
@@ -65,6 +129,7 @@ namespace MatchEvaluatorTest
             static private MapFormat[] tableFormats = new MapFormat[] {
                 new MapFormat("RawHyphenDigits", Format.RawHyphenDigits),
                 new MapFormat("Raw32Digits", Format.Raw32Digits),
+                new MapFormat("GuidVariable", Format.GuidVariable),
             };
 
             private Match m;
@@ -111,6 +176,8 @@ namespace MatchEvaluatorTest
                         return guid.ToString("D");
                     case Format.Raw32Digits:
                         return guid.ToString("N");
+                    case Format.GuidVariable:
+                        return guid.ToString("X");
                 }
                 return string.Empty;
             }
@@ -184,6 +251,9 @@ namespace MatchEvaluatorTest
             string input5 = @"{f86ed29d8060485facf293716ca463b8}";
             string input6 = @"f86ed29d8060485facf293716ca463b8";
             string input7 = @"F86ED29D8060485FACF293716CA463B8";
+            string input8 = @"{0xf86ed29d, 0x8060, 0x485f,{0xac,0xf2,0x93,0x71,0x6c,0xa4,0x63,0xb8}}";
+            string input9 = @"{0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}";
+            string input10 = @"{0x00,0x00,0x00,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}";
             string[] array = new string[]
             {
                 input1,
@@ -193,6 +263,9 @@ namespace MatchEvaluatorTest
                 input5,
                 input6,
                 input7,
+                input8,
+                input9,
+                input10,
             };
             string input = string.Join(Environment.NewLine, array);
             Console.WriteLine("Original");
