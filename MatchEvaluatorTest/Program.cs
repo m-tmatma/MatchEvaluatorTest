@@ -20,11 +20,15 @@ namespace MatchEvaluatorTest
         // https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/backreference-constructs-in-regular-expressions
         //static private string name_head_separater = @"(?:" + raw_head_separater + ")";
         //static private string name_tail_separater = @"(?:" + raw_tail_separater + ")";
-        static private string name_head_separater = @"\b";
-        static private string name_tail_separater = @"\b";
-        static private string name_guid_string1 = @"(?<raw_guid1>" + raw_guid_string1 + ")";
-        static private string name_guid_string2 = @"(?<raw_guid2>" + raw_guid_string2 + ")";
-        static private string guid_string = name_head_separater + name_guid_string1 + name_tail_separater;
+        static private string word_separater = @"\b";
+        static private string name_guid_string1 = @"(?<RawHyphenDigits>" + raw_guid_string1 + ")";
+        static private string name_guid_string2 = @"(?<Raw32Digits>"     + raw_guid_string2 + ")";
+        static private string guid_string1 = word_separater + name_guid_string1 + word_separater;
+        static private string guid_string2 = word_separater + name_guid_string2 + word_separater;
+
+        static private string[] elements = new string[] { guid_string1, guid_string2 };
+        static private string[] elements_par = Array.ConvertAll(elements, delegate (string elem) { return "(" + elem + ")"; });
+        static private string guid_string = string.Join("|", elements_par);
         static private Regex reg = new Regex(guid_string);
 
         private class ProcessGuid
@@ -66,17 +70,15 @@ namespace MatchEvaluatorTest
             {
                 this.m = m;
                 var key = string.Empty;
-                if (m.Groups["raw_guid1"].Success)
+                if (m.Groups["RawHyphenDigits"].Success)
                 {
-                    var guid = new Guid(m.Groups["raw_guid1"].Value);
+                    key = new Guid(m.Groups["RawHyphenDigits"].Value).ToString("D");
                     this.GuidFormat = Format.RawHyphenDigits;
-                    key = guid.ToString("D");
                 }
-                else if (m.Groups["raw_guid2"].Success)
+                else if (m.Groups["Raw32Digits"].Success)
                 {
-                    var guid = new Guid(m.Groups["raw_guid2"].Value);
+                    key = new Guid(m.Groups["Raw32Digits"].Value).ToString("D");
                     this.GuidFormat = Format.RawHyphenDigits;
-                    key = guid.ToString("D");
                 }
                 else
                 {
@@ -165,12 +167,18 @@ namespace MatchEvaluatorTest
             string input2 = @"[Guid(""f86ed29d-8060-485f-acf2-93716ca463b8"")]";
             string input3 = @"""f86ed29d-8060-485f-acf2-93716ca463b8""";
             string input4 = @"{f86ed29d-8060-485f-acf2-93716ca463b8}";
+            string input5 = @"{f86ed29d8060485facf293716ca463b8}";
+            string input6 = @"f86ed29d8060485facf293716ca463b8";
+            string input7 = @"F86ED29D8060485FACF293716CA463B8";
             string[] array = new string[]
             {
                 input1,
                 input2,
                 input3,
                 input4,
+                input5,
+                input6,
+                input7,
             };
             string input = string.Join(Environment.NewLine, array);
             Console.WriteLine("Original");
