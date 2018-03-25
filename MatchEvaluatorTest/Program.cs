@@ -99,24 +99,6 @@ namespace MatchEvaluatorTest
                         break;
                     }
                 }
-#if OLDCODE
-                var key = string.Empty;
-                if (m.Groups["RawHyphenDigits"].Success)
-                {
-                    key = new Guid(m.Groups["RawHyphenDigits"].Value).ToString("D");
-                    this.GuidFormat = Format.RawHyphenDigits;
-                }
-                else if (m.Groups["Raw32Digits"].Success)
-                {
-                    key = new Guid(m.Groups["Raw32Digits"].Value).ToString("D");
-                    this.GuidFormat = Format.RawHyphenDigits;
-                }
-                else
-                {
-                    this.GuidFormat = Format.Unknown;
-                }
-                this.Key = key;
-#endif
             }
 
             public string Convert(Guid guid)
