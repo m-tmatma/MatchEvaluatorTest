@@ -89,9 +89,7 @@ namespace MatchEvaluatorTest
                                                + @"\("
                                                + spaces
                                                + raw_variable
-                                               + spaces
-                                               + @","
-                                               + spaces
+                                               + comma_spaces
                                                + @")"
                                                + name_guid_value_def
                                                + @"(?="
@@ -108,13 +106,9 @@ namespace MatchEvaluatorTest
                                                + @"\("
                                                + spaces
                                                + raw_variable
-                                               + spaces
-                                               + @","
-                                               + spaces
+                                               + comma_spaces
                                                + raw_variable
-                                               + spaces
-                                               + @","
-                                               + spaces
+                                               + comma_spaces
                                                + @")"
                                                + name_guid_value_imp
                                                + @"(?="
