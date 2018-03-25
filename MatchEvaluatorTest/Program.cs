@@ -50,6 +50,23 @@ namespace MatchEvaluatorTest
                 /// </summary>
                 Raw32Digits,
             };
+
+            private class MapFormat
+            {
+                public string Key;
+                public Format GuidFormat;
+
+                public MapFormat(string Key, Format GuidFormat)
+                {
+                    this.Key = Key;
+                    this.GuidFormat = GuidFormat;
+                }
+            };
+            static private MapFormat[] tableFormats = new MapFormat[] {
+                new MapFormat("RawHyphenDigits", Format.RawHyphenDigits),
+                new MapFormat("Raw32Digits", Format.Raw32Digits),
+            };
+
             private Match m;
 
             /// <summary>
@@ -69,6 +86,20 @@ namespace MatchEvaluatorTest
             public ProcessGuid(Match m)
             {
                 this.m = m;
+
+                this.Key = string.Empty;
+                this.GuidFormat = Format.Unknown;
+                foreach (MapFormat mapFormat in tableFormats)
+                {
+                    if (m.Groups[mapFormat.Key].Success)
+                    {
+                        var guid = new Guid(m.Groups[mapFormat.Key].Value);
+                        this.Key =  guid.ToString("D");
+                        this.GuidFormat = mapFormat.GuidFormat;
+                        break;
+                    }
+                }
+#if OLDCODE
                 var key = string.Empty;
                 if (m.Groups["RawHyphenDigits"].Success)
                 {
@@ -85,6 +116,7 @@ namespace MatchEvaluatorTest
                     this.GuidFormat = Format.Unknown;
                 }
                 this.Key = key;
+#endif
             }
 
             public string Convert(Guid guid)
