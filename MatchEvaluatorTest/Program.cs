@@ -50,14 +50,14 @@ namespace MatchEvaluatorTest
             var replaceWithNewGuid = new ReplaceWithNewGuid();
 
             // Replace matched characters using the delegate method.
-            var output = replaceWithNewGuid.Replace(input);
+            var output = replaceWithNewGuid.ReplaceNewGuid(input);
             Console.WriteLine("New All");
             Console.WriteLine(output);
             //testReg.Dump();
             Console.WriteLine("");
 
             // Replace matched characters using the delegate method.
-            var output2 = replaceWithNewGuid.Replace2(input);
+            var output2 = replaceWithNewGuid.ReplaceSameGuidToSameGuid(input);
             Console.WriteLine("New for different ones");
             Console.WriteLine(output2);
             //testReg.Dump();

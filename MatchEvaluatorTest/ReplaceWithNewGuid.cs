@@ -326,45 +326,76 @@ namespace MatchEvaluatorTest
                 return this.m.ToString();
             }
         }
- 
-        public string ReplaceCC(Match m)
+
+        /// <summary>
+        /// utility function to create GUID.
+        /// </summary>
+        /// <returns></returns>
+        internal Guid NewGuid()
+        {
+            return Guid.NewGuid();
+        }
+
+        /// <summary>
+        /// delegate for ReplaceNewGuid
+        /// </summary>
+        /// <param name="m"></param>
+        /// <returns></returns>
+        public string delegateReplaceNewGuid(Match m)
         {
             var processGuid = new ProcessGuid(m);
-            var newGuid = Guid.NewGuid();
+            var newGuid = NewGuid();
 
             var guid_str = processGuid.Convert(newGuid);
             return guid_str;
-
         }
 
-        public string ReplaceCC2(Match m)
+        /// <summary>
+        /// delegate for ReplaceSameGuidToSameGuid
+        /// </summary>
+        /// <param name="m"></param>
+        /// <returns></returns>
+        public string delegateReplaceSameGuidToSameGuid(Match m)
         {
             var processGuid = new ProcessGuid(m);
             var key = processGuid.Key;
             var guid = new Guid(key);
             if (!dict.ContainsKey(key))
             {
-                dict[key] = Guid.NewGuid();
+                dict[key] = NewGuid();
             }
             var newGuid = dict[key];
 
             var guid_str = processGuid.Convert(newGuid);
             return guid_str;
         }
- 
-        public string Replace(string input)
+
+        /// <summary>
+        /// replace GUIDs to new GUIDs.
+        /// all GUIDS will be replaced with the different GUIDs.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public string ReplaceNewGuid(string input)
         {
             //Console.WriteLine(guid_string);
-            var myEvaluator = new MatchEvaluator(ReplaceCC);
+            var myEvaluator = new MatchEvaluator(delegateReplaceNewGuid);
 
             // Replace matched characters using the delegate method.
             var output = reg.Replace(input, myEvaluator);
             return output;
         }
-        public string Replace2(string input)
+
+        /// <summary>
+        /// replace GUIDs to new GUIDs.
+        /// same GUIDS will be replaced with the same GUIDs.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public string ReplaceSameGuidToSameGuid(string input)
         {
             //Console.WriteLine(guid_string);
-            var myEvaluator = new MatchEvaluator(ReplaceCC2);
+            var myEvaluator = new MatchEvaluator(delegateReplaceSameGuidToSameGuid);
 
             // Replace matched characters using the delegate method.
             var output = reg.Replace(input, myEvaluator);
