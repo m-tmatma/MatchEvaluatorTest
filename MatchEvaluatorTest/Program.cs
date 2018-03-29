@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace MatchEvaluatorTest
 {
-    public class TestReg
+    public class ReplaceWithNewGuid
     {
         private Dictionary<string, Guid> dict = new Dictionary<string, Guid>();
 
@@ -420,17 +420,17 @@ namespace MatchEvaluatorTest
             Console.WriteLine(input);
             Console.WriteLine("");
 
-            var testReg = new TestReg();
+            var replaceWithNewGuid = new ReplaceWithNewGuid();
 
             // Replace matched characters using the delegate method.
-            var output = testReg.Replace(input);
+            var output = replaceWithNewGuid.Replace(input);
             Console.WriteLine("New All");
             Console.WriteLine(output);
             //testReg.Dump();
             Console.WriteLine("");
 
             // Replace matched characters using the delegate method.
-            var output2 = testReg.Replace2(input);
+            var output2 = replaceWithNewGuid.Replace2(input);
             Console.WriteLine("New for different ones");
             Console.WriteLine(output2);
             //testReg.Dump();
