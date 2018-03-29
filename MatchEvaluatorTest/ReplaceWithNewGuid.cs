@@ -9,6 +9,21 @@ namespace MatchEvaluatorTest
 {
     public class ReplaceWithNewGuid
     {
+        /// <summary>
+        /// delegate for creating new GUID
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public delegate Guid NewGuid();
+
+        /// <summary>
+        /// hold delegate NewGuid
+        /// </summary>
+        private NewGuid delegateNewGuid;
+
+        /// <summary>
+        /// dictionary for storing previous translation of GUIDs.
+        /// </summary>
         private Dictionary<string, Guid> dict = new Dictionary<string, Guid>();
 
         /// <summary>
@@ -328,12 +343,27 @@ namespace MatchEvaluatorTest
         }
 
         /// <summary>
+        /// constructor
+        /// </summary>
+        public ReplaceWithNewGuid(NewGuid newGuid = null)
+        {
+            if(newGuid != null)
+            {
+                this.delegateNewGuid = newGuid;
+            }
+            else
+            {
+                this.delegateNewGuid = delegate () { return Guid.NewGuid(); };
+            }
+        }
+
+        /// <summary>
         /// utility function to create GUID.
         /// </summary>
         /// <returns></returns>
-        internal Guid NewGuid()
+        private Guid CallNewGuid()
         {
-            return Guid.NewGuid();
+            return this.delegateNewGuid();
         }
 
         /// <summary>
@@ -344,7 +374,7 @@ namespace MatchEvaluatorTest
         public string delegateReplaceNewGuid(Match m)
         {
             var processGuid = new ProcessGuid(m);
-            var newGuid = NewGuid();
+            var newGuid = CallNewGuid();
 
             var guid_str = processGuid.Convert(newGuid);
             return guid_str;
@@ -362,7 +392,7 @@ namespace MatchEvaluatorTest
             var guid = new Guid(key);
             if (!dict.ContainsKey(key))
             {
-                dict[key] = NewGuid();
+                dict[key] = CallNewGuid();
             }
             var newGuid = dict[key];
 
