@@ -43,5 +43,11 @@
     <Compile Include="UnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReplaceWithNewGuid\ReplaceWithNewGuid.csproj">
+      <Project>{fc6fd44b-3ce4-4965-af31-ec15e669299d}</Project>
+      <Name>ReplaceWithNewGuid</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
