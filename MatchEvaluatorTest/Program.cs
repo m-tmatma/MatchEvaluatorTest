@@ -8,46 +8,13 @@ using ReplaceGuid;
 
 namespace MatchEvaluatorTest
 {
-    /// <summary>
-    /// Tester Class for providing custom GUID generator 
-    /// </summary>
-    public class Tester1
-    {
-        private int Counter;
-
-        public Tester1()
-        {
-            this.Counter = 0;
-        }
-
-        /// <summary>
-        /// delegate for ReplaceSameGuidToSameGuid
-        /// </summary>
-        /// <param name="m"></param>
-        /// <returns></returns>
-        public Guid NewGuid()
-        {
-            this.Counter++;
-
-            var builder = new StringBuilder();
-            for(int i = 0; i < 16; i++)
-            {
-                byte ch = (byte)((i + this.Counter) & 0xff);
-                builder.Append(ch.ToString("x2"));
-            }
-
-            var guidString = builder.ToString();
-            Console.WriteLine(guidString);
-            return new Guid(guidString);
-        }
-    }
-
     class Program
     {
         /// <summary>
-        /// https://msdn.microsoft.com/ja-jp/library/system.text.regularexpressions.matchevaluator(v=vs.95).aspx
+        /// Main function
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">arguments to the program</param>
+        /// <see href = "https://msdn.microsoft.com/en-us/library/system.text.regularexpressions.matchevaluator(v=vs.110).aspx">MatchEvaluator Delegate</see>
         static void Main(string[] args)
         {
             string input1 = @"[Guid(""f86ed29d-8060-485f-acf2-93716ca463b8"")]";
@@ -95,23 +62,6 @@ namespace MatchEvaluatorTest
             var output2 = replaceWithNewGuid.ReplaceSameGuidToSameGuid(input);
             Console.WriteLine("New for different ones");
             Console.WriteLine(output2);
-            //testReg.Dump();
-            Console.WriteLine("");
-
-            var tester1 = new Tester1();
-            var replaceTester1 = new ReplaceWithNewGuid(tester1.NewGuid);
-
-            // Replace matched characters using the delegate method.
-            var outputTester = replaceTester1.ReplaceNewGuid(input);
-            Console.WriteLine("New All");
-            Console.WriteLine(outputTester);
-            //testReg.Dump();
-            Console.WriteLine("");
-
-            // Replace matched characters using the delegate method.
-            var output2Tester = replaceTester1.ReplaceSameGuidToSameGuid(input);
-            Console.WriteLine("New for different ones");
-            Console.WriteLine(output2Tester);
             //testReg.Dump();
             Console.WriteLine("");
         }
