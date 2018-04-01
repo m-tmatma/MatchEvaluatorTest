@@ -46,6 +46,16 @@ namespace ReplaceGuid
         private const string Result3 = @"{01020304-0506-0708-090a-0b0c0d0e0f10}";
 
         /// <summary>
+        /// input data for test4
+        /// </summary>
+        private const string Input4 = @"00000000000000000000000000000000";
+
+        /// <summary>
+        /// expected output data for test3
+        /// </summary>
+        private const string Result4 = @"0102030405060708090a0b0c0d0e0f10";
+
+        /// <summary>
         /// input data for IMPLEMENT_OLECREATE
         /// </summary>
         private const string InputOLECREATE = @"IMPLEMENT_OLECREATE(<<class>>, <<external_name>>, 0x00000000, 0x0000, 0x0000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);";
@@ -107,6 +117,7 @@ namespace ReplaceGuid
         [TestCase(Input1, Result1)]
         [TestCase(Input2, Result2)]
         [TestCase(Input3, Result3)]
+        [TestCase(Input4, Result4)]
         [TestCase(InputOLECREATE, ResultOLECREATE)]
         [TestCase(InputDefineGuid, ResultDefineGuid)]
         [TestCase(InputGUIDStruct, ResultGUIDStruct)]
