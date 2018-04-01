@@ -14,8 +14,14 @@ namespace ReplaceGuid
     /// </summary>
     internal class GuidGenerater
     {
+        /// <summary>
+        /// seed to create a new GUID.
+        /// </summary>
         private int counter;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GuidGenerater" /> class.
+        /// </summary>
         public GuidGenerater()
         {
             this.counter = 0;
@@ -24,8 +30,7 @@ namespace ReplaceGuid
         /// <summary>
         /// delegate for ReplaceSameGuidToSameGuid
         /// </summary>
-        /// <param name="m"></param>
-        /// <returns></returns>
+        /// <returns>new GUID</returns>
         public Guid NewGuid()
         {
             this.counter++;
