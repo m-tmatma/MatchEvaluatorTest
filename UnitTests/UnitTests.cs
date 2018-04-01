@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-
-namespace ReplaceGuid
+﻿namespace ReplaceGuid
 {
+    using System;
+    using System.Text;
+    using NUnit.Framework;
+
     /// <summary>
     /// Tester Class for providing custom GUID generator 
     /// </summary>
