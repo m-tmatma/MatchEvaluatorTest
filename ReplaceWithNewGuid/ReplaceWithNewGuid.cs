@@ -263,6 +263,7 @@ namespace ReplaceGuid
             /// <summary>
             /// GUID formatter table
             /// </summary>
+            /// <see href="https://msdn.microsoft.com/en-us/library/97af8hh4(v=vs.110).aspx">Guid.ToString Method (String)</see>
             static private MapFormat[] tableFormats = new MapFormat[] {
                 new MapFormat("RawHyphenDigits", Format.RawHyphenDigits, delegate(Guid guid) { return guid.ToString("D"); }),
                 new MapFormat("Raw32Digits",     Format.Raw32Digits,     delegate(Guid guid) { return guid.ToString("N"); }),
