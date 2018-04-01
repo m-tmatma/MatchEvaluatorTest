@@ -43,7 +43,7 @@ namespace ReplaceGuid
             }
 
             var guidString = builder.ToString();
-            Console.WriteLine(guidString);
+            //Console.WriteLine(guidString);
             return new Guid(guidString);
         }
     }
