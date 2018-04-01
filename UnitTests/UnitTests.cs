@@ -18,32 +18,32 @@ namespace ReplaceGuid
         /// <summary>
         /// input data for test1
         /// </summary>
-        const string input1 = @"[Guid(""00000000-0000-0000-0000-000000000000"")]";
+        private const string input1 = @"[Guid(""00000000-0000-0000-0000-000000000000"")]";
 
         /// <summary>
         /// expected output data for test1
         /// </summary>
-        const string result1 = @"[Guid(""01020304-0506-0708-090a-0b0c0d0e0f10"")]";
+        private const string result1 = @"[Guid(""01020304-0506-0708-090a-0b0c0d0e0f10"")]";
 
         /// <summary>
         /// input data for test2
         /// </summary>
-        const string input2 = @"""00000000-0000-0000-0000-000000000000""";
+        private const string input2 = @"""00000000-0000-0000-0000-000000000000""";
 
         /// <summary>
         /// expected output data for test2
         /// </summary>
-        const string result2 = @"""01020304-0506-0708-090a-0b0c0d0e0f10""";
+        private const string result2 = @"""01020304-0506-0708-090a-0b0c0d0e0f10""";
 
         /// <summary>
         /// input data for test3
         /// </summary>
-        const string input3 = @"{00000000-0000-0000-0000-000000000000}";
+        private const string input3 = @"{00000000-0000-0000-0000-000000000000}";
 
         /// <summary>
         /// expected output data for test3
         /// </summary>
-        const string result3 = @"{01020304-0506-0708-090a-0b0c0d0e0f10}";
+        private const string result3 = @"{01020304-0506-0708-090a-0b0c0d0e0f10}";
 
         /// <summary>
         /// GUID generator class to make unit-testing easier
