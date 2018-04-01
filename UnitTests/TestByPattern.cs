@@ -205,6 +205,7 @@ namespace ReplaceGuid
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
             var output = replaceWithGuid.ReplaceSameGuidToSameGuid(input);
 
+#if PRINTF_DEBUG
             Console.WriteLine("input: ");
             Console.WriteLine(input);
 
@@ -213,6 +214,7 @@ namespace ReplaceGuid
 
             Console.WriteLine("expected: ");
             Console.WriteLine(expected);
+#endif // PRINTF_DEBUG
 
             Assert.That(output, Is.EqualTo(expected));
         }

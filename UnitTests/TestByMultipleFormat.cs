@@ -155,7 +155,9 @@ namespace ReplaceGuid
                 var format = (Format)values.GetValue(random.Next(values.Length));
 
                 var separator = string.Format("------ {0} ------", i);
+#if PRINTF_DEBUG
                 Console.WriteLine(i.ToString() + ": " + format.ToString());
+#endif // PRINTF_DEBUG
 
                 var srcGuid = newSrcGuid();
                 var dstGuid = dstGuidGenerator.NewGuid();
@@ -182,6 +184,7 @@ namespace ReplaceGuid
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
             var output = replaceWithGuid.ReplaceSameGuidToSameGuid(input);
 
+#if PRINTF_DEBUG
             Console.WriteLine("input: ");
             Console.WriteLine(input);
 
@@ -190,6 +193,7 @@ namespace ReplaceGuid
 
             Console.WriteLine("expected: ");
             Console.WriteLine(expected);
+#endif // PRINTF_DEBUG
 
             Assert.That(output, Is.EqualTo(expected));
         }
