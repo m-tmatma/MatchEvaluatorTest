@@ -132,8 +132,8 @@ namespace ReplaceGuid
                                                + @")";
 
         // For reference
-        // https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/regular-expression-language-quick-reference#backreference_constructs
-        // https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/backreference-constructs-in-regular-expressions
+        // https://docs.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference#backreference_constructs
+        // https://docs.microsoft.com/en-us/dotnet/standard/base-types/backreference-constructs-in-regular-expressions
         //static private string name_head_separater = @"(?:" + raw_head_separater + ")";
         //static private string name_tail_separater = @"(?:" + raw_tail_separater + ")";
         static private string word_separater = @"\b";
@@ -160,8 +160,9 @@ namespace ReplaceGuid
         private class ProcessGuid
         {
             /// <summary>
-            /// https://msdn.microsoft.com/ja-jp/library/97af8hh4(v=vs.110).aspx
+            /// GUID format enum
             /// </summary>
+            /// <see href="https://msdn.microsoft.com/en-us/library/97af8hh4(v=vs.110).aspx">Guid.ToString Method (String)</see>
             public enum Format
             {
                 Unknown,
@@ -260,7 +261,7 @@ namespace ReplaceGuid
             }
 
             /// <summary>
-            /// https://msdn.microsoft.com/ja-jp/library/97af8hh4(v=vs.110).aspx
+            /// GUID formatter table
             /// </summary>
             static private MapFormat[] tableFormats = new MapFormat[] {
                 new MapFormat("RawHyphenDigits", Format.RawHyphenDigits, delegate (Guid guid) { return guid.ToString("D"); }),

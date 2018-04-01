@@ -11,9 +11,10 @@ namespace MatchEvaluatorTest
     class Program
     {
         /// <summary>
-        /// https://msdn.microsoft.com/ja-jp/library/system.text.regularexpressions.matchevaluator(v=vs.95).aspx
+        /// Main function
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">arguments to the program</param>
+        /// <see href = "https://msdn.microsoft.com/en-us/library/system.text.regularexpressions.matchevaluator(v=vs.110).aspx">MatchEvaluator Delegate</see>
         static void Main(string[] args)
         {
             string input1 = @"[Guid(""f86ed29d-8060-485f-acf2-93716ca463b8"")]";
