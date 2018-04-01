@@ -76,26 +76,6 @@ namespace ReplaceGuid
         private const string ResultGUIDStruct = @"static const GUID <<name>> = {0x01020304,0x0506,0x0708,{0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x10}};";
 
         /// <summary>
-        /// input data for combination
-        /// </summary>
-        private const string InputConcatenated = Input1 + 
-                                                 Input2 +
-                                                 Input3 +
-                                                 InputOLECREATE +
-                                                 InputDefineGuid +
-                                                 InputGUIDStruct;
-
-        /// <summary>
-        /// expected output data for combination
-        /// </summary>
-        private const string ResultConcatenated = Result1 + 
-                                                  Result2 +
-                                                  Result3 +
-                                                  ResultOLECREATE +
-                                                  ResultDefineGuid +
-                                                  ResultGUIDStruct;
-
-        /// <summary>
         /// GUID generator class to make unit-testing easier
         /// </summary>
         private GuidGenerater guidGenerator;
@@ -130,7 +110,6 @@ namespace ReplaceGuid
         [TestCase(InputOLECREATE, ResultOLECREATE)]
         [TestCase(InputDefineGuid, ResultDefineGuid)]
         [TestCase(InputGUIDStruct, ResultGUIDStruct)]
-        [TestCase(InputConcatenated, ResultConcatenated)]
         public void TestGuidByStaticPattern(string input, string expected)
         {
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
