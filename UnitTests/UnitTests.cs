@@ -200,10 +200,10 @@ namespace ReplaceGuid
             }
 
             var input = builderInput.ToString();
-            var output = builderResult.ToString();
+            var expected = builderResult.ToString();
 
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
-            var expected = replaceWithGuid.ReplaceSameGuidToSameGuid(input);
+            var output = replaceWithGuid.ReplaceSameGuidToSameGuid(input);
 
             Console.WriteLine("input: ");
             Console.WriteLine(input);
