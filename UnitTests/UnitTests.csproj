@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GuidGenerater.cs" />
+    <Compile Include="TestByMultipleFormat.cs" />
     <Compile Include="TestByPattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
