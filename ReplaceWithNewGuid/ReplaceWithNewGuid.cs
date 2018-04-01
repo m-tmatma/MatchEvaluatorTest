@@ -153,7 +153,7 @@ namespace ReplaceGuid
             name_guid_string4,
             name_guid_string5,
         };
-        static private string[] elements_par = Array.ConvertAll(elements, delegate (string elem) { return "(" + elem + ")"; });
+        static private string[] elements_par = Array.ConvertAll(elements, delegate(string elem) { return "(" + elem + ")"; });
         static private string guid_string = string.Join("|", elements_par);
         static private Regex reg = new Regex(guid_string);
 
@@ -264,11 +264,11 @@ namespace ReplaceGuid
             /// GUID formatter table
             /// </summary>
             static private MapFormat[] tableFormats = new MapFormat[] {
-                new MapFormat("RawHyphenDigits", Format.RawHyphenDigits, delegate (Guid guid) { return guid.ToString("D"); }),
-                new MapFormat("Raw32Digits",     Format.Raw32Digits,     delegate (Guid guid) { return guid.ToString("N"); }),
-                new MapFormat("GuidVariable",    Format.GuidVariable,    delegate (Guid guid) { return guid.ToString("X"); }),
-                new MapFormat("RAW_GUID_DEF",    Format.DEFINE_GUID,     delegate (Guid guid) { return FormatGuidAsRawValues(guid); }),
-                new MapFormat("RAW_GUID_IMP",    Format.OLECREATE,       delegate (Guid guid) { return FormatGuidAsRawValues(guid); }),
+                new MapFormat("RawHyphenDigits", Format.RawHyphenDigits, delegate(Guid guid) { return guid.ToString("D"); }),
+                new MapFormat("Raw32Digits",     Format.Raw32Digits,     delegate(Guid guid) { return guid.ToString("N"); }),
+                new MapFormat("GuidVariable",    Format.GuidVariable,    delegate(Guid guid) { return guid.ToString("X"); }),
+                new MapFormat("RAW_GUID_DEF",    Format.DEFINE_GUID,     delegate(Guid guid) { return FormatGuidAsRawValues(guid); }),
+                new MapFormat("RAW_GUID_IMP",    Format.OLECREATE,       delegate(Guid guid) { return FormatGuidAsRawValues(guid); }),
             };
  
             private Match m;
@@ -354,7 +354,7 @@ namespace ReplaceGuid
             }
             else
             {
-                this.delegateNewGuid = delegate () { return Guid.NewGuid(); };
+                this.delegateNewGuid = delegate { return Guid.NewGuid(); };
             }
         }
 
