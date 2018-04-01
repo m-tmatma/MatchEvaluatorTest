@@ -24,7 +24,7 @@ namespace ReplaceGuid
         /// enum of GUID Format
         /// </summary>
         /// <see href="https://msdn.microsoft.com/en-us/library/97af8hh4(v=vs.110).aspx">Guid.ToString Method (String)</see>
-        private enum Format
+        private enum ValidFormat
         {
             /// <summary>
             /// enum definition for hyphen separated GUID
@@ -92,7 +92,7 @@ namespace ReplaceGuid
         /// </summary>
         /// <param name="guid">GUID to be formatted</param>
         /// <param name="destFormat">format type</param>
-        delegate void FormatGuid(StringBuilder builder, Guid guid, Format destFormat);
+        delegate void FormatGuid(StringBuilder builder, Guid guid, ValidFormat destFormat);
 
         /// <summary>
         /// multiple GUID pattern test.
@@ -142,7 +142,7 @@ namespace ReplaceGuid
             var builderInput = new StringBuilder();
             var builderResult = new StringBuilder();
 
-            Array values = Enum.GetValues(typeof(Format));
+            Array values = Enum.GetValues(typeof(ValidFormat));
             var random = new Random();
 
             // GUID generator for dest data
@@ -152,7 +152,7 @@ namespace ReplaceGuid
             for (int i = 0; i < count; i++)
             {
                 // choose enum 'Format' randomly
-                var format = (Format)values.GetValue(random.Next(values.Length));
+                var format = (ValidFormat)values.GetValue(random.Next(values.Length));
 
                 var separator = string.Format("------ {0} ------", i);
 #if PRINTF_DEBUG
@@ -162,7 +162,7 @@ namespace ReplaceGuid
                 var srcGuid = newSrcGuid();
                 var dstGuid = dstGuidGenerator.NewGuid();
 
-                FormatGuid formatGuid = delegate(StringBuilder builder, Guid guid, Format destFormat)
+                FormatGuid formatGuid = delegate(StringBuilder builder, Guid guid, ValidFormat destFormat)
                 {
                     builder.Append(separator);
                     builder.Append(Environment.NewLine);
@@ -205,23 +205,23 @@ namespace ReplaceGuid
         /// <param name="index">formt index</param>
         /// <returns>formatted GUID string</returns>
         /// <see href="https://msdn.microsoft.com/en-us/library/97af8hh4(v=vs.110).aspx">Guid.ToString Method (String)</see>
-        private static string FormatGuidString(Guid guid, Format format)
+        private static string FormatGuidString(Guid guid, ValidFormat format)
         {
             switch (format)
             {
-                case Format.TypeN:
+                case ValidFormat.TypeN:
                     return guid.ToString("N");
-                case Format.TypeD:
+                case ValidFormat.TypeD:
                     return guid.ToString("D");
-                case Format.TypeB:
+                case ValidFormat.TypeB:
                     return guid.ToString("B");
-                case Format.TypeP:
+                case ValidFormat.TypeP:
                     return guid.ToString("P");
-                case Format.TypeX:
+                case ValidFormat.TypeX:
                     return guid.ToString("X");
-                case Format.TypeOLECREATE:
+                case ValidFormat.TypeOLECREATE:
                     return FormatGuidAsImplementOleCreate(guid);
-                case Format.TypeDEFINE_GUID:
+                case ValidFormat.TypeDEFINE_GUID:
                     return FormatGuidAsDefineGuid(guid);
             }
             return string.Empty;
