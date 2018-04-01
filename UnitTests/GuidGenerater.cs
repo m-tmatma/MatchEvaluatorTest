@@ -14,11 +14,11 @@ namespace ReplaceGuid
     /// </summary>
     internal class GuidGenerater
     {
-        private int Counter;
+        private int counter;
 
         public GuidGenerater()
         {
-            this.Counter = 0;
+            this.counter = 0;
         }
 
         /// <summary>
@@ -28,12 +28,12 @@ namespace ReplaceGuid
         /// <returns></returns>
         public Guid NewGuid()
         {
-            this.Counter++;
+            this.counter++;
 
             var builder = new StringBuilder();
             for (int i = 0; i < 16; i++)
             {
-                byte ch = (byte)((i + this.Counter) & 0xff);
+                byte ch = (byte)((i + this.counter) & 0xff);
                 builder.Append(ch.ToString("x2"));
             }
 
