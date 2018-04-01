@@ -81,8 +81,8 @@ namespace ReplaceGuid
             TypeWrongDEFINE_GUID,
 
             /// <summary>
-            /// enum definition for IMPLEMENT_OLECREATE
-            /// IMPLEMENT_OLECREATE(&lt;&lt;class&gt;&gt;, &lt;&lt;external_name&gt;&gt;, 0x00000000,0x0000,0x0000, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00);
+            /// enum definition for wrong IMPLEMENT_OLECREATE
+            /// IMPLEMENT_OLECREATE2(&lt;&lt;class&gt;&gt;, &lt;&lt;external_name&gt;&gt;, 0x00000000,0x0000,0x0000, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00);
             /// </summary>
             TypeWrongOLECREATE,
         }
