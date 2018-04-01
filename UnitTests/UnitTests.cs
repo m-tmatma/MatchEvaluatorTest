@@ -66,12 +66,12 @@ namespace ReplaceGuid
         private const string ResultDefineGuid = @"DEFINE_GUID(<<name>>, 0x01020304, 0x0506, 0x0708, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10);";
 
         /// <summary>
-        /// input data for static const GUID
+        /// input data for GUID structure definition
         /// </summary>
         private const string InputGUIDStruct = @"static const GUID <<name>> = {0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};";
 
         /// <summary>
-        /// expected output data for static const GUID
+        /// expected output data for GUID structure definition
         /// </summary>
         private const string ResultGUIDStruct = @"static const GUID <<name>> = {0x01020304,0x0506,0x0708,{0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x10}};";
 
