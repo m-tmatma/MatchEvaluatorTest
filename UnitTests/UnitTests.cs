@@ -58,12 +58,12 @@ namespace ReplaceGuid
         /// <summary>
         /// input data for DEFINE_GUID
         /// </summary>
-        private const string InputDEFINE_GUID = @"DEFINE_GUID(<<name>>, 0x00000000, 0x0000, 0x0000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);";
+        private const string InputDefineGuid = @"DEFINE_GUID(<<name>>, 0x00000000, 0x0000, 0x0000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);";
 
         /// <summary>
         /// expected output data for DEFINE_GUID
         /// </summary>
-        private const string ResultDEFINE_GUID = @"DEFINE_GUID(<<name>>, 0x01020304, 0x0506, 0x0708, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10);";
+        private const string ResultDefineGuid = @"DEFINE_GUID(<<name>>, 0x01020304, 0x0506, 0x0708, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10);";
 
         /// <summary>
         /// input data for static const GUID
@@ -129,11 +129,11 @@ namespace ReplaceGuid
             Console.WriteLine("expected: " + ResultOLECREATE);
             Assert.That(outputOLECreate, Is.EqualTo(ResultOLECREATE));
 
-            var outputDEFINE_GUID = replaceWithGuid.ReplaceSameGuidToSameGuid(InputDEFINE_GUID);
-            Console.WriteLine("input   : " + InputDEFINE_GUID);
-            Console.WriteLine("output  : " + outputDEFINE_GUID);
-            Console.WriteLine("expected: " + ResultDEFINE_GUID);
-            Assert.That(outputDEFINE_GUID, Is.EqualTo(ResultDEFINE_GUID));
+            var outputDefineGuid = replaceWithGuid.ReplaceSameGuidToSameGuid(InputDefineGuid);
+            Console.WriteLine("input   : " + InputDefineGuid);
+            Console.WriteLine("output  : " + outputDefineGuid);
+            Console.WriteLine("expected: " + ResultDefineGuid);
+            Assert.That(outputDefineGuid, Is.EqualTo(ResultDefineGuid));
 
             var outputGUIDStruct = replaceWithGuid.ReplaceSameGuidToSameGuid(InputGUIDStruct);
             Console.WriteLine("input   : " + InputGUIDStruct);
