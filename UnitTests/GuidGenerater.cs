@@ -1,4 +1,9 @@
-﻿namespace ReplaceGuid
+﻿//-----------------------------------------------------------------------
+// <copyright file="GuidGenerater.cs" company="Masaru Tsuchiyama">
+//     Copyright (c) Masaru Tsuchiyama. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace ReplaceGuid
 {
     using System;
     using System.Text;
