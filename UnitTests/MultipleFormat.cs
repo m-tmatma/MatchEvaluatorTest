@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TestByMultipleFormat.cs" company="Masaru Tsuchiyama">
+// <copyright file="MultipleFormat.cs" company="Masaru Tsuchiyama">
 //     Copyright (c) Masaru Tsuchiyama. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -14,7 +14,7 @@ namespace Unittest
     /// unit test for ReplaceWithNewGuid
     /// </summary>
     [TestFixture]
-    public class TestByMultipleFormat
+    public class MultipleFormat
     {
         /// <summary>
         /// GUID generator class to make unit-testing easier
