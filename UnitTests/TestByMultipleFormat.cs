@@ -134,6 +134,7 @@ namespace Unittest
         [TestCase(20, 6)]
         [TestCase(50, 7)]
         [TestCase(100, 8)]
+        [Category("ReplaceSameGuidToSameGuid")]
         public void TestGuidByRandomValidFormatWithNewGuid(int count, int repeat)
         {
             TestGuidByRandomValidFormat(count, repeat, Guid.NewGuid);
@@ -153,6 +154,7 @@ namespace Unittest
         [TestCase(20, 6)]
         [TestCase(50, 7)]
         [TestCase(100, 8)]
+        [Category("ReplaceNewGuid")]
         public void TestGuidByRandomValidFormatWithNewGuidReplaceNewGuid(int count, int repeat)
         {
             TestGuidByRandomValidFormatReplaceNewGuid(count, repeat, Guid.NewGuid);
@@ -172,6 +174,7 @@ namespace Unittest
         [TestCase(20, 6)]
         [TestCase(50, 7)]
         [TestCase(100, 8)]
+        [Category("ReplaceSameGuidToSameGuid")]
         public void TestGuidByRandomValidFormatWithSequencialGuid(int count, int repeat)
         {
             // GUID generator for source data
@@ -193,6 +196,7 @@ namespace Unittest
         [TestCase(20, 6)]
         [TestCase(50, 7)]
         [TestCase(100, 8)]
+        [Category("ReplaceNewGuid")]
         public void TestGuidByRandomValidFormatWithSequencialGuidReplaceNewGuid(int count, int repeat)
         {
             // GUID generator for source data
@@ -214,6 +218,7 @@ namespace Unittest
         [TestCase(20, 6)]
         [TestCase(50, 7)]
         [TestCase(100, 8)]
+        [Category("ReplaceSameGuidToSameGuid")]
         public void TestGuidByRandomInvalidFormatWithNewGuid(int count, int repeat)
         {
             TestGuidByRandomInvalidFormat(count, repeat, Guid.NewGuid);
@@ -234,6 +239,7 @@ namespace Unittest
         [TestCase(20, 6)]
         [TestCase(50, 7)]
         [TestCase(100, 8)]
+        [Category("ReplaceSameGuidToSameGuid")]
         public void TestGuidByRandomInvalidFormatWithSequencialGuid(int count, int repeat)
         {
             // GUID generator for source data
@@ -242,7 +248,7 @@ namespace Unittest
         }
 
         /// <summary>
-        /// utility function
+        /// utility function for ReplaceSameGuidToSameGuid
         /// </summary>
         /// <param name="count">loop count</param>
         /// <param name="repeat">repeat count</param>
@@ -312,7 +318,7 @@ namespace Unittest
         }
 
         /// <summary>
-        /// utility function
+        /// utility function for ReplaceNewGuid
         /// </summary>
         /// <param name="count">loop count</param>
         /// <param name="repeat">repeat count</param>
@@ -382,7 +388,7 @@ namespace Unittest
         }
 
         /// <summary>
-        /// utility function
+        /// utility function for ReplaceSameGuidToSameGuid
         /// </summary>
         /// <param name="count">loop count</param>
         /// <param name="repeat">repeat count</param>

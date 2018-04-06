@@ -150,6 +150,7 @@ namespace Unittest
         [TestCase(InputOLECREATE, ResultOLECREATE)]
         [TestCase(InputDefineGuid, ResultDefineGuid)]
         [TestCase(InputGUIDStruct, ResultGUIDStruct)]
+        [Category("ReplaceSameGuidToSameGuid")]
         public void TestGuidByStaticPatternSame(string input, string expected)
         {
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
@@ -173,6 +174,7 @@ namespace Unittest
         [TestCase(InputOLECREATE, ResultOLECREATE)]
         [TestCase(InputDefineGuid, ResultDefineGuid)]
         [TestCase(InputGUIDStruct, ResultGUIDStruct)]
+        [Category("ReplaceNewGuid")]
         public void TestGuidByStaticPatternNew(string input, string expected)
         {
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
@@ -195,6 +197,7 @@ namespace Unittest
         [TestCase(20)]
         [TestCase(50)]
         [TestCase(100)]
+        [Category("ReplaceSameGuidToSameGuid")]
         public void TestGuidByRandomlyConcatenatedPattern(int count)
         {
             // check data size
