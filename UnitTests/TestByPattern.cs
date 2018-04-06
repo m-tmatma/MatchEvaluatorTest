@@ -150,10 +150,33 @@ namespace Unittest
         [TestCase(InputOLECREATE, ResultOLECREATE)]
         [TestCase(InputDefineGuid, ResultDefineGuid)]
         [TestCase(InputGUIDStruct, ResultGUIDStruct)]
-        public void TestGuidByStaticPattern(string input, string expected)
+        public void TestGuidByStaticPatternSame(string input, string expected)
         {
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
             var output = replaceWithGuid.ReplaceSameGuidToSameGuid(input);
+            Console.WriteLine("input   : " + input);
+            Console.WriteLine("output  : " + output);
+            Console.WriteLine("expected: " + expected);
+            Assert.That(output, Is.EqualTo(expected));
+        }
+
+        /// <summary>
+        /// unit test method
+        /// </summary>
+        /// <see href="https://github.com/nunit/docs/wiki/TestCase-Attribute">TestCase Attribute</see>
+        /// <see href="https://github.com/nunit/docs/wiki/TestCaseSource-Attribute">TestCaseSource Attribute</see>
+        /// <see href="https://github.com/nunit/docs/wiki/TestCaseData">TestCaseData</see>
+        [TestCase(Input1, Result1)]
+        [TestCase(Input2, Result2)]
+        [TestCase(Input3, Result3)]
+        [TestCase(Input4, Result4)]
+        [TestCase(InputOLECREATE, ResultOLECREATE)]
+        [TestCase(InputDefineGuid, ResultDefineGuid)]
+        [TestCase(InputGUIDStruct, ResultGUIDStruct)]
+        public void TestGuidByStaticPatternNew(string input, string expected)
+        {
+            var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
+            var output = replaceWithGuid.ReplaceNewGuid(input);
             Console.WriteLine("input   : " + input);
             Console.WriteLine("output  : " + output);
             Console.WriteLine("expected: " + expected);
