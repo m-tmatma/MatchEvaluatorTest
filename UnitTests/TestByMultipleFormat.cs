@@ -153,7 +153,7 @@ namespace Unittest
         [Category("ReplaceSameGuidToSameGuid")]
         public void TestGuidByRandomValidFormatWithNewGuid(int count, int repeat)
         {
-            TestGuidByRandomValidFormat(count, repeat, Guid.NewGuid);
+            TestGuidByRandomValidFormat(count, repeat, TestMethod.ReplaceSameGuidToSameGuid, Guid.NewGuid);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Unittest
         [Category("ReplaceNewGuid")]
         public void TestGuidByRandomValidFormatWithNewGuidReplaceNewGuid(int count, int repeat)
         {
-            TestGuidByRandomValidFormatReplaceNewGuid(count, repeat, Guid.NewGuid);
+            TestGuidByRandomValidFormat(count, repeat, TestMethod.ReplaceNewGuid, Guid.NewGuid);
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Unittest
         {
             // GUID generator for source data
             var srcGuidGenerator = new GuidGenerater();
-            TestGuidByRandomValidFormat(count, repeat, srcGuidGenerator.NewGuid);
+            TestGuidByRandomValidFormat(count, repeat, TestMethod.ReplaceSameGuidToSameGuid, srcGuidGenerator.NewGuid);
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Unittest
         {
             // GUID generator for source data
             var srcGuidGenerator = new GuidGenerater();
-            TestGuidByRandomValidFormatReplaceNewGuid(count, repeat, srcGuidGenerator.NewGuid);
+            TestGuidByRandomValidFormat(count, repeat, TestMethod.ReplaceNewGuid, srcGuidGenerator.NewGuid);
         }
 
         /// <summary>
@@ -311,8 +311,9 @@ namespace Unittest
         /// </summary>
         /// <param name="count">loop count</param>
         /// <param name="repeat">repeat count</param>
+        /// <param name="testMethod">test method</param>
         /// <param name="newSrcGuid">delegate for creating new source GUIDs</param>
-        public void TestGuidByRandomValidFormat(int count, int repeat, ReplaceWithNewGuid.NewGuid newSrcGuid)
+        public void TestGuidByRandomValidFormat(int count, int repeat, TestMethod testMethod, ReplaceWithNewGuid.NewGuid newSrcGuid)
         {
             var builderInput = new StringBuilder();
             var builderResult = new StringBuilder();
@@ -335,7 +336,11 @@ namespace Unittest
 #endif // PRINTF_DEBUG
 
                 var srcGuid = newSrcGuid();
-                var dstGuid = dstGuidGenerator.NewGuid();
+                var dstGuid = Guid.Empty;
+                if (testMethod == TestMethod.ReplaceSameGuidToSameGuid)
+                {
+                    dstGuid = dstGuidGenerator.NewGuid();
+                }
 
                 ValidFormatGuid formatGuid = delegate(StringBuilder builder, Guid guid, ValidFormat destFormat)
                 {
@@ -351,6 +356,10 @@ namespace Unittest
                     // create input data
                     formatGuid(builderInput, srcGuid, format);
 
+                    if (testMethod == TestMethod.ReplaceNewGuid)
+                    {
+                        dstGuid = dstGuidGenerator.NewGuid();
+                    }
                     // create expected data
                     formatGuid(builderResult, dstGuid, format);
                 }
@@ -360,77 +369,7 @@ namespace Unittest
             var expected = builderResult.ToString();
 
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
-            var output = replaceWithGuid.ReplaceSameGuidToSameGuid(input);
-
-#if PRINTF_DEBUG
-            Console.WriteLine("input: ");
-            Console.WriteLine(input);
-
-            Console.WriteLine("output: ");
-            Console.WriteLine(output);
-
-            Console.WriteLine("expected: ");
-            Console.WriteLine(expected);
-#endif // PRINTF_DEBUG
-
-            Assert.That(output, Is.EqualTo(expected));
-        }
-
-        /// <summary>
-        /// utility function for ReplaceNewGuid
-        /// </summary>
-        /// <param name="count">loop count</param>
-        /// <param name="repeat">repeat count</param>
-        /// <param name="newSrcGuid">delegate for creating new source GUIDs</param>
-        public void TestGuidByRandomValidFormatReplaceNewGuid(int count, int repeat, ReplaceWithNewGuid.NewGuid newSrcGuid)
-        {
-            var builderInput = new StringBuilder();
-            var builderResult = new StringBuilder();
-
-            Array values = Enum.GetValues(typeof(ValidFormat));
-            var random = new Random();
-
-            // GUID generator for dest data
-            var dstGuidGenerator = new GuidGenerater();
-
-            // create source data
-            for (int i = 0; i < count; i++)
-            {
-                // choose enum 'Format' randomly
-                var format = (ValidFormat)values.GetValue(random.Next(values.Length));
-
-                var separator = string.Format("------ {0} ------", i);
-#if PRINTF_DEBUG
-                Console.WriteLine(i.ToString() + ": " + format.ToString());
-#endif // PRINTF_DEBUG
-
-                var srcGuid = newSrcGuid();
-
-                ValidFormatGuid formatGuid = delegate (StringBuilder builder, Guid guid, ValidFormat destFormat)
-                {
-                    builder.Append(separator);
-                    builder.Append(Environment.NewLine);
-                    builder.Append(FormatGuidString(guid, destFormat));
-                    builder.Append(Environment.NewLine);
-                    builder.Append(Environment.NewLine);
-                };
-
-                for (int j = 0; j < repeat; j++)
-                {
-                    // create input data
-                    formatGuid(builderInput, srcGuid, format);
-
-                    var dstGuid = dstGuidGenerator.NewGuid();
-                    // create expected data
-                    formatGuid(builderResult, dstGuid, format);
-                }
-            }
-
-            var input = builderInput.ToString();
-            var expected = builderResult.ToString();
-
-            var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
-            var output = replaceWithGuid.ReplaceNewGuid(input);
+            var output = CallMethodOfReplaceWithNewGuid(replaceWithGuid, testMethod, input);
 
 #if PRINTF_DEBUG
             Console.WriteLine("input: ");
@@ -496,19 +435,7 @@ namespace Unittest
             var input = builderInput.ToString();
 
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
-            var output = string.Empty;
-
-            switch(testMethod)
-            {
-                case TestMethod.ReplaceNewGuid:
-                    output = replaceWithGuid.ReplaceNewGuid(input);
-                    break;
-                case TestMethod.ReplaceSameGuidToSameGuid:
-                    output = replaceWithGuid.ReplaceSameGuidToSameGuid(input);
-                    break;
-                default:
-                    throw new ArgumentException(testMethod.ToString());
-            }
+            var output = CallMethodOfReplaceWithNewGuid(replaceWithGuid, testMethod, input);
 
 #if PRINTF_DEBUG
             Console.WriteLine("input: ");
@@ -519,6 +446,30 @@ namespace Unittest
 #endif // PRINTF_DEBUG
 
             Assert.That(output, Is.EqualTo(input));
+        }
+
+        /// <summary>
+        /// call a method of ReplaceWithNewGuid
+        /// </summary>
+        /// <param name="replaceWithGuid">instance of ReplaceWithNewGuid</param>
+        /// <param name="testMethod">invoke method</param>
+        /// <param name="input">input data</param>
+        /// <returns>result of ReplaceWithNewGuid</returns>
+        private string CallMethodOfReplaceWithNewGuid(ReplaceWithNewGuid replaceWithGuid, TestMethod testMethod, string input)
+        {
+            var output = string.Empty;
+            switch (testMethod)
+            {
+                case TestMethod.ReplaceNewGuid:
+                    output = replaceWithGuid.ReplaceNewGuid(input);
+                    break;
+                case TestMethod.ReplaceSameGuidToSameGuid:
+                    output = replaceWithGuid.ReplaceSameGuidToSameGuid(input);
+                    break;
+                default:
+                    throw new ArgumentException(testMethod.ToString());
+            }
+            return output;
         }
 
         /// <summary>
