@@ -3,11 +3,10 @@
 //     Copyright (c) Masaru Tsuchiyama. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
-namespace ReplaceGuid
+namespace Unittest
 {
     using System;
     using System.Text;
-    using NUnit.Framework;
 
     /// <summary>
     /// Tester Class for providing custom GUID generator 

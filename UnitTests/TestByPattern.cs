@@ -3,11 +3,12 @@
 //     Copyright (c) Masaru Tsuchiyama. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
-namespace ReplaceGuid
+namespace Unittest
 {
     using System;
     using System.Text;
     using NUnit.Framework;
+    using ReplaceGuid;
 
     /// <summary>
     /// unit test for ReplaceWithNewGuid
