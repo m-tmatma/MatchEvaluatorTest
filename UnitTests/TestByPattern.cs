@@ -151,7 +151,7 @@ namespace Unittest
         [TestCase(InputDefineGuid, ResultDefineGuid)]
         [TestCase(InputGUIDStruct, ResultGUIDStruct)]
         [Category("ReplaceSameGuidToSameGuid")]
-        public void TestGuidByStaticPatternSame(string input, string expected)
+        public void Test_ReplaceSameGuidToSameGuid_GuidGenerater(string input, string expected)
         {
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
             var output = replaceWithGuid.ReplaceSameGuidToSameGuid(input);
@@ -175,7 +175,7 @@ namespace Unittest
         [TestCase(InputDefineGuid, ResultDefineGuid)]
         [TestCase(InputGUIDStruct, ResultGUIDStruct)]
         [Category("ReplaceNewGuid")]
-        public void TestGuidByStaticPatternNew(string input, string expected)
+        public void Test_ReplaceNewGuid_GuidGenerater(string input, string expected)
         {
             var replaceWithGuid = new ReplaceWithNewGuid(this.guidGenerator.NewGuid);
             var output = replaceWithGuid.ReplaceNewGuid(input);
@@ -198,7 +198,7 @@ namespace Unittest
         [TestCase(50)]
         [TestCase(100)]
         [Category("ReplaceSameGuidToSameGuid")]
-        public void TestGuidByRandomlyConcatenatedPattern(int count)
+        public void TestRepeat_ReplaceSameGuidToSameGuid_GuidGenerater(int count)
         {
             // check data size
             Assert.That(Inputs.Length, Is.GreaterThan(0));

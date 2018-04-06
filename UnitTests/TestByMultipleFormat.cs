@@ -151,7 +151,7 @@ namespace Unittest
         [TestCase(50, 7)]
         [TestCase(100, 8)]
         [Category("ReplaceSameGuidToSameGuid")]
-        public void TestGuidByRandomValidFormatWithNewGuid(int count, int repeat)
+        public void TestRandomValid_ReplaceSameGuidToSameGuid_NewGuid(int count, int repeat)
         {
             TestGuidByRandomValidFormat(count, repeat, TestMethod.ReplaceSameGuidToSameGuid, Guid.NewGuid);
         }
@@ -171,7 +171,7 @@ namespace Unittest
         [TestCase(50, 7)]
         [TestCase(100, 8)]
         [Category("ReplaceNewGuid")]
-        public void TestGuidByRandomValidFormatWithNewGuidReplaceNewGuid(int count, int repeat)
+        public void TestRandomValid_ReplaceNewGuid_NewGuid(int count, int repeat)
         {
             TestGuidByRandomValidFormat(count, repeat, TestMethod.ReplaceNewGuid, Guid.NewGuid);
         }
@@ -191,7 +191,7 @@ namespace Unittest
         [TestCase(50, 7)]
         [TestCase(100, 8)]
         [Category("ReplaceSameGuidToSameGuid")]
-        public void TestGuidByRandomValidFormatWithSequencialGuid(int count, int repeat)
+        public void TestRandomValid_ReplaceSameGuidToSameGuid_GuidGenerater(int count, int repeat)
         {
             // GUID generator for source data
             var srcGuidGenerator = new GuidGenerater();
@@ -213,7 +213,7 @@ namespace Unittest
         [TestCase(50, 7)]
         [TestCase(100, 8)]
         [Category("ReplaceNewGuid")]
-        public void TestGuidByRandomValidFormatWithSequencialGuidReplaceNewGuid(int count, int repeat)
+        public void TestRandomValid_ReplaceNewGuid_GuidGenerater(int count, int repeat)
         {
             // GUID generator for source data
             var srcGuidGenerator = new GuidGenerater();
@@ -235,7 +235,7 @@ namespace Unittest
         [TestCase(50, 7)]
         [TestCase(100, 8)]
         [Category("ReplaceSameGuidToSameGuid")]
-        public void TestGuidByRandomInvalidFormatWithNewGuid(int count, int repeat)
+        public void TestRandomInvalid_ReplaceSameGuidToSameGuid_NewGuid(int count, int repeat)
         {
             TestGuidByRandomInvalidFormat(count, repeat, TestMethod.ReplaceSameGuidToSameGuid, Guid.NewGuid);
         }
@@ -256,7 +256,7 @@ namespace Unittest
         [TestCase(50, 7)]
         [TestCase(100, 8)]
         [Category("ReplaceSameGuidToSameGuid")]
-        public void TestGuidByRandomInvalidFormatWithSequencialGuid(int count, int repeat)
+        public void TestRandomInvalid_ReplaceSameGuidToSameGuid_GuidGenerater(int count, int repeat)
         {
             // GUID generator for source data
             var srcGuidGenerator = new GuidGenerater();
@@ -278,7 +278,7 @@ namespace Unittest
         [TestCase(50, 7)]
         [TestCase(100, 8)]
         [Category("ReplaceNewGuid")]
-        public void TestGuidByRandomInvalidFormatWithNewGuid2(int count, int repeat)
+        public void TestRandomInvalid_ReplaceNewGuid_NewGuid(int count, int repeat)
         {
             TestGuidByRandomInvalidFormat(count, repeat, TestMethod.ReplaceNewGuid, Guid.NewGuid);
         }
@@ -299,7 +299,7 @@ namespace Unittest
         [TestCase(50, 7)]
         [TestCase(100, 8)]
         [Category("ReplaceNewGuid")]
-        public void TestGuidByRandomInvalidFormatWithSequencialGuid2(int count, int repeat)
+        public void TestRandomInvalid_ReplaceNewGuid_GuidGenerater(int count, int repeat)
         {
             // GUID generator for source data
             var srcGuidGenerator = new GuidGenerater();
