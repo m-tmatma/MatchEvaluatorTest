@@ -497,8 +497,9 @@ namespace Unittest
                     return FormatGuidAsImplementOleCreate(guid);
                 case ValidFormat.TypeDEFINE_GUID:
                     return FormatGuidAsDefineGuid(guid);
+                default:
+                    throw new ArgumentException(format.ToString());
             }
-            return string.Empty;
         }
 
         /// <summary>
@@ -516,8 +517,9 @@ namespace Unittest
                     return FormatGuidAsImplementOleCreate(guid, "DEFINE_GUID2");
                 case InvalidFormat.TypeWrongOLECREATE:
                     return FormatGuidAsDefineGuid(guid, "IMPLEMENT_OLECREATE2");
+                default:
+                    throw new ArgumentException(format.ToString());
             }
-            return string.Empty;
         }
 
         /// <summary>
