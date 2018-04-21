@@ -65,6 +65,23 @@ namespace Unittest
             Assert.That(output, Is.EqualTo(expected));
         }
 
+        [TestCase("Variable1", "VariableA", "", "")]
+        [TestCase("Variable2", "VariableB", "{", "")]
+        [TestCase("Variable3", "VariableC", "", "}")]
+        public void Test_ParseInvalidVariableNoCurlyBracket(string inputKeyword, string outputKeyword, string left, string right)
+        {
+            var translationTable = new Dictionary<string, string>();
+            translationTable[inputKeyword] = outputKeyword;
+
+            var input = left + inputKeyword + right;
+            var expected = input;
+            var output = ProcessVariable.ReplaceVariable(input, translationTable);
+            Console.WriteLine("input   : " + input);
+            Console.WriteLine("output  : " + output);
+            Console.WriteLine("expected: " + expected);
+            Assert.That(output, Is.EqualTo(expected));
+        }
+
         [TestCase("Variable1", "VariableA", 1)]
         [TestCase("Variable2", "VariableB", 2)]
         [TestCase("Variable3", "VariableC", 3)]
