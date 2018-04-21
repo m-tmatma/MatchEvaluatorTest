@@ -51,8 +51,13 @@
     <Compile Include="MultipleFormat.cs" />
     <Compile Include="StaticPattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestParseVariable.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ParseVariable\ParseVariable.csproj">
+      <Project>{15aacba9-59ad-4ca7-9f26-e7eb23ce1469}</Project>
+      <Name>ParseVariable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ReplaceWithNewGuid\ReplaceWithNewGuid.csproj">
       <Project>{fc6fd44b-3ce4-4965-af31-ec15e669299d}</Project>
       <Name>ReplaceWithNewGuid</Name>
