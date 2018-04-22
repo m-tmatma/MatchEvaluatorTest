@@ -52,6 +52,7 @@
     <Compile Include="StaticPattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestParseVariable.cs" />
+    <Compile Include="TestProcessDelegateVariable.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParseVariable\ParseVariable.csproj">
