@@ -19,11 +19,11 @@ namespace ParseVariable
         /// </summary>
         internal class MatchEvaluatorHandler
         {
-            private Dictionary<string, GetNewText> m_translationTable;
+            private GetNewText delegateTranslate;
 
-            public MatchEvaluatorHandler(Dictionary<string, GetNewText> translationTable)
+            public MatchEvaluatorHandler(GetNewText delegateTranslate)
             {
-                this.m_translationTable = translationTable;
+                this.delegateTranslate = delegateTranslate;
             }
 
             /// <summary>
@@ -51,10 +51,7 @@ namespace ParseVariable
                     index = int.Parse(groupIndex.Value);
                 }
 
-                if (this.m_translationTable.ContainsKey(keyword))
-                {
-                    outData = this.m_translationTable[keyword](keyword, index);
-                }
+                outData = this.delegateTranslate(keyword, index);
                 return outData;
             }
         }
@@ -63,11 +60,11 @@ namespace ParseVariable
         /// public interface to replace keyword
         /// </summary>
         /// <param name="input"></param>
-        /// <param name="translationTable"></param>
+        /// <param name="delegateTranslate"></param>
         /// <returns></returns>
-        public static string ReplaceVariable(string input, Dictionary<string, GetNewText> translationTable)
+        public static string ReplaceVariable(string input, GetNewText delegateTranslate)
         {
-            var evaluateHander = new MatchEvaluatorHandler(translationTable);
+            var evaluateHander = new MatchEvaluatorHandler(delegateTranslate);
             var myEvaluator = new MatchEvaluator(evaluateHander.delegateReplace);
 
             // Replace matched characters using the delegate method.

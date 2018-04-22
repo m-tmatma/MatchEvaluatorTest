@@ -43,10 +43,9 @@ namespace Unittest
         [TestCase("Variable4", "VariableD")]
         public void Test_ParseVariable(string inputKeyword, string outputKeyword)
         {
-            var translationTable = GetTranslationTable();
             var input = "{" + inputKeyword + "}";
             var expected = "{" + outputKeyword + "}";
-            var output = ProcessDelegateVariable.ReplaceVariable(input, translationTable);
+            var output = ProcessDelegateVariable.ReplaceVariable(input, delegateGetNewText);
             Console.WriteLine("input   : " + input);
             Console.WriteLine("output  : " + output);
             Console.WriteLine("expected: " + expected);
@@ -55,10 +54,9 @@ namespace Unittest
 
         public void Test_ParseInvalidVariable(string inputKeyword, string outputKeyword, string left, string right)
         {
-            var translationTable = GetTranslationTable();
             var input = "{" + left + inputKeyword + right + "}";
             var expected = input;
-            var output = ProcessDelegateVariable.ReplaceVariable(input, translationTable);
+            var output = ProcessDelegateVariable.ReplaceVariable(input, delegateGetNewText);
             Console.WriteLine("input   : " + input);
             Console.WriteLine("output  : " + output);
             Console.WriteLine("expected: " + expected);
@@ -70,10 +68,9 @@ namespace Unittest
         [TestCase("Variable3", "VariableC", "", "}")]
         public void Test_ParseInvalidVariableNoCurlyBracket(string inputKeyword, string outputKeyword, string left, string right)
         {
-            var translationTable = GetTranslationTable();
             var input = left + inputKeyword + right;
             var expected = input;
-            var output = ProcessDelegateVariable.ReplaceVariable(input, translationTable);
+            var output = ProcessDelegateVariable.ReplaceVariable(input, delegateGetNewText);
             Console.WriteLine("input   : " + input);
             Console.WriteLine("output  : " + output);
             Console.WriteLine("expected: " + expected);
@@ -86,11 +83,10 @@ namespace Unittest
         [TestCase("Variable4", "VariableD", 4)]
         public void Test_ParseVariableIndex(string inputKeyword, string outputKeyword, int index)
         {
-            var translationTable = GetTranslationTable();
             var indexStr = "(" + index.ToString() + ")";
             var input = "{" + inputKeyword + indexStr + "}";
             var expected = "{" + outputKeyword + indexStr + "}";
-            var output = ProcessDelegateVariable.ReplaceVariable(input, translationTable);
+            var output = ProcessDelegateVariable.ReplaceVariable(input, delegateGetNewText);
             Console.WriteLine("input   : " + input);
             Console.WriteLine("output  : " + output);
             Console.WriteLine("expected: " + expected);
@@ -109,29 +105,14 @@ namespace Unittest
         [TestCase("Variable9", "VariableI", 9, "", ")")]
         public void Test_ParseVariableInvalidIndex(string inputKeyword, string outputKeyword, int index, string left, string right)
         {
-            var translationTable = GetTranslationTable();
             var indexStr = left + index.ToString() + right;
             var input = "{" + inputKeyword + indexStr + "}";
             var expected = input;
-            var output = ProcessDelegateVariable.ReplaceVariable(input, translationTable);
+            var output = ProcessDelegateVariable.ReplaceVariable(input, delegateGetNewText);
             Console.WriteLine("input   : " + input);
             Console.WriteLine("output  : " + output);
             Console.WriteLine("expected: " + expected);
             Assert.That(output, Is.EqualTo(expected));
-        }
-
-        /// <summary>
-        /// create dictionary for delegate
-        /// </summary>
-        /// <returns></returns>
-        internal Dictionary<string, ProcessDelegateVariable.GetNewText> GetTranslationTable()
-        {
-            var translationTable = new Dictionary<string, ProcessDelegateVariable.GetNewText>();
-            foreach(string keyword in keywordMap.Keys)
-            {
-                translationTable[keyword] = delegateGetNewText;
-            }
-            return translationTable;
         }
 
         /// <summary>
@@ -142,7 +123,7 @@ namespace Unittest
         /// <returns></returns>
         internal string delegateGetNewText(string keyword, int index)
         {
-            string newkeyword = string.Empty;
+            var newkeyword = keyword;
             if (keywordMap.ContainsKey(keyword))
             {
                 newkeyword = keywordMap[keyword];
