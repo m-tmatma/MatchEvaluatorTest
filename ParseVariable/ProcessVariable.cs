@@ -31,13 +31,15 @@ namespace ParseVariable
             /// <returns></returns>
             public string delegateReplace(Match m)
             {
-                if (!m.Groups["keyword"].Success)
+                var groupKeyword = m.Groups["keyword"];
+                var groupIndex   = m.Groups["index"];
+                if (!groupKeyword.Success)
                 {
                     return m.Groups[0].Value;
                 }
 
                 // get matched keyword
-                var keyword = m.Groups["keyword"].Value;
+                var keyword = groupKeyword.Value;
 
                 // replace a keyword with newer one.
                 if (this.m_translationTable.ContainsKey(keyword))
@@ -45,10 +47,10 @@ namespace ParseVariable
                     keyword = this.m_translationTable[keyword];
                 }
 
-                if (m.Groups["index"].Success)
+                if (groupIndex.Success)
                 {
                     // with index
-                    var index = m.Groups["index"].Value;
+                    var index = groupIndex.Value;
                     return keyword + "(" + index + ")";
                 }
                 else
