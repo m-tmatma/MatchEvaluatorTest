@@ -191,7 +191,7 @@ namespace ReplaceGuid
                 /// IMPLEMENT_OLECREATE(<<class>>, <<external_name>>, 0x00000000,0x0000,0x0000, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00);
                 /// </summary>
                 OLECREATE,
-            };
+            }
 
             /// <summary>
             /// delegate for converting a guid to a string
@@ -215,7 +215,7 @@ namespace ReplaceGuid
                     this.GuidFormat = GuidFormat;
                     this.delegateConvertGuid = delegateConvertGuid;
                 }
-            };
+            }
 
             /// <summary>
             /// 0x00000000,0x0000,0x0000, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
